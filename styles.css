@@ -365,6 +365,24 @@ button, input, select, textarea {
   color: #ffffff;
 }
 
+/* Responsive variants defaults (Desktop) */
+.counties-short {
+  display: none;
+}
+.counties-full {
+  display: inline;
+}
+.phone-icon-mobile {
+  display: none;
+}
+.wa-text-short {
+  display: none;
+}
+.wa-text-full {
+  display: inline;
+}
+
+
 /* ==========================================================================
    MAIN SITE HEADER (STICKY)
    ========================================================================== */
@@ -2349,14 +2367,69 @@ button, input, select, textarea {
 }
 
 @media (max-width: 900px) {
+  .top-bar {
+    padding: 6px 0;
+  }
   .top-bar-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 6px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 0 12px;
+  }
+  .top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.775rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .top-bar .hazard-stripe,
+  .top-bar .top-tag,
+  .top-bar .top-divider {
+    display: none !important;
+  }
+  .counties-full {
+    display: none !important;
+  }
+  .counties-short {
+    display: inline !important;
+    font-weight: 700;
+    color: var(--color-accent);
   }
   .top-bar-right {
-    flex-wrap: wrap;
-    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+  .top-phone.secondary {
+    display: none !important;
+  }
+  .top-phone .phone-label {
+    display: none !important;
+  }
+  .phone-icon-mobile {
+    display: inline-block !important;
+    font-size: 0.75rem;
+  }
+  .top-phone strong {
+    font-size: 0.8rem;
+    letter-spacing: 0.2px;
+  }
+  .top-wa-badge {
+    padding: 2px 7px;
+    font-size: 0.72rem;
+  }
+  .wa-text-full {
+    display: none !important;
+  }
+  .wa-text-short {
+    display: inline !important;
   }
   .main-nav {
     display: none;
@@ -2438,3 +2511,24 @@ button, input, select, textarea {
     padding: 25px 20px;
   }
 }
+
+@media (max-width: 480px) {
+  .top-bar {
+    padding: 5px 0;
+  }
+  .top-bar-content {
+    padding: 0 8px;
+    gap: 4px;
+  }
+  .top-bar-left {
+    font-size: 0.72rem;
+  }
+  .top-phone strong {
+    font-size: 0.75rem;
+  }
+  .top-wa-badge {
+    padding: 2px 6px;
+    font-size: 0.68rem;
+  }
+}
+
