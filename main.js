@@ -239,15 +239,16 @@ function initContactForm() {
 
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const fullName = document.getElementById('fullName').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const county = document.getElementById('county').value;
-    const clientType = document.getElementById('clientType').value;
-    const serviceNeeded = document.getElementById('serviceNeeded').value;
-    const message = document.getElementById('message').value.trim();
+    const fullName = document.getElementById('fullName')?.value.trim() || '';
+    const phone = document.getElementById('phone')?.value.trim() || '';
+    const email = document.getElementById('email')?.value.trim() || '';
+    const county = document.getElementById('county')?.value || '';
+    const clientType = document.getElementById('clientType')?.value || '';
+    const serviceNeeded = document.getElementById('serviceNeeded')?.value || '';
+    const message = document.getElementById('message')?.value.trim() || '';
 
     // Basic Validation
     if (!fullName || !phone || !county || !clientType || !serviceNeeded) {
@@ -264,19 +265,50 @@ function initContactForm() {
 
     // Processing animation
     submitBtn.disabled = true;
+    const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<span>Processing Dispatch Request...</span>';
 
-    setTimeout(() => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>SUBMIT QUOTE REQUEST</span>';
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fullName,
+          phone,
+          email,
+          county,
+          clientType,
+          serviceNeeded,
+          message
+        })
+      });
 
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        showFeedback(
+          data.message || `Thank you, ${fullName}! Your inquiry for ${serviceNeeded} in ${county} has been received. Our dispatch team will call you at ${phone} promptly.`,
+          'success'
+        );
+        form.reset();
+      } else {
+        showFeedback(
+          data.error || 'There was an issue submitting your request. Please call us at (954) 548-5558.',
+          'error'
+        );
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
       showFeedback(
-        `Thank you, ${fullName}! Your inquiry for ${serviceNeeded} in ${county} has been received. Our dispatch team will call you at ${phone} promptly.`,
-        'success'
+        'Connection error submitting the form. Please call our team directly at (954) 548-5558.',
+        'error'
       );
-
-      form.reset();
-    }, 900);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }
   });
 
   function showFeedback(msg, type) {
